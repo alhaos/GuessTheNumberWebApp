@@ -1,11 +1,20 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 	"net/http"
+	"text/template"
 )
 
 var TheNumber int
+var CurrentUser UserDetalies = UserDetalies{"aaa", "", false}
+
+type UserDetalies struct {
+	Login    string
+	Password string
+	Success  bool
+}
 
 func main() {
 	initTheNumber()
@@ -18,8 +27,29 @@ func initTheNumber() {
 
 func StartWebApp() {
 	http.HandleFunc("/", index)
+	http.ListenAndServe(":80", nil)
 }
 
 func index(writer http.ResponseWriter, request *http.Request) {
+	if request.Method == "POST" {
+		CurrentUser.Login = request.PostFormValue("login")
+		CurrentUser.Password = request.PostFormValue("password")
+		Login(&CurrentUser)
+		fmt.Println(CurrentUser.Success)
+
+		t, _ := template.ParseFiles("templates/index.html")
+		t.ExecuteTemplate(writer, "index", CurrentUser)
+	} else {
+		t, _ := template.ParseFiles("templates/index.html")
+		t.ExecuteTemplate(writer, "index", CurrentUser)
+	}
+}
+
+func Login(CtUser *UserDetalies) {
+	if (*CtUser).Login == "user" && (*CtUser).Password == "pass" {
+		(*CtUser).Success = true
+	} else {
+		(*CtUser).Success = false
+	}
 
 }

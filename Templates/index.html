@@ -1,12 +1,27 @@
-<!DOCTYPE html>
 {{ define "index" }}
+<!DOCTYPE html>
 <html lang="ru">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Guess the number web app</title>
+  <meta charset="UTF-8">
+  <title>Guess the number web app</title>
 </head>
+
 <body>
+  
+  {{ if .Success }}
+    <h1>Login success</h1>
+    <p>Loing: {{ .Login }}</p>
+  {{ else }}
+  <h1>Guess the number web app</h1>
+  <form action="/" method="post">
+    <input type="text" name="login" placeholder="login">
+    <input type="password" name="password" placeholder="password">
+    <input type="submit">
+  </form>
+  {{ end }}
 
 </body>
+
 </html>
 {{ end }}
