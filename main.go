@@ -26,8 +26,9 @@ func initTheNumber() {
 }
 
 func StartWebApp() {
+	port := os.Getenv("PORT")
 	http.HandleFunc("/", index)
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(port, nil)
 }
 
 func index(writer http.ResponseWriter, request *http.Request) {
